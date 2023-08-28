@@ -46,7 +46,14 @@ static void BASIC_SYS() { NYI(); }
 static void DEFKEY() { NYI(); }
 static void PRINT() { NYI(); }
 static void MONITOR() { NYI(); }
-static void RESET() { NYI(); }
+
+extern uint64_t instructions, clockticks6502;
+
+static void RESET() {
+ printf("\n6502 INSTRUCTION COUNT:%ld\n", instructions);
+ printf("6502 CLOCK TICKS: %ld\n", clockticks6502);
+ exit(0);
+}
 
 // C65
 static void MONITOR_CALL() { NYI(); }
@@ -179,7 +186,8 @@ kernal_dispatch_c64()
 		case 0xFF84:	IOINIT();	break;
 			// RAM init
 		case 0xFF87:	RAMTAS();	break;
-
+			// 'sys 64738'
+		case 0xFCE2:    RESET();	break;
 		default:
 			return false;
 	}
