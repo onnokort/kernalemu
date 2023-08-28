@@ -115,7 +115,8 @@ main(int argc, char **argv)
 			uint8_t lo = fgetc(binary);
 			uint8_t hi = fgetc(binary);
 			uint16_t load_address = lo | hi << 8;
-			fread(&RAM[load_address], 65536 - load_address, 1, binary);
+			size_t nread=fread(&RAM[load_address], 65536 - load_address, 1, binary);
+			(void)nread;
 			fclose(binary);
 			if (load_address == 0x8000) {
 				c64_has_external_rom = true;

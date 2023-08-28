@@ -1,4 +1,5 @@
-CFLAGS=-Wall -Werror -g
+CFLAGS=-Wall -Werror -g -O3 -flto
+LDFLAGS=-flto
 SDIR=src
 ODIR=build
 EXECUTABLE=$(ODIR)/kernalemu
