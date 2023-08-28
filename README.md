@@ -1,3 +1,17 @@
+# kernalemu - Forked variant for easier Linux-on-C64-development
+
+This is a work-in-progress fork of
+[kernalemu](https://github.com/mist64/kernalemu) by Michael Steil
+et. al. to implement REU support and a couple simple optimizations and
+statistics for development of
+[semu-c64](https://github.com/onnokort/semu-c64).  The added code is
+partially in throwaway state, messy and has assumptions such as fixed
+filenames etc. It's main purpose right now is to simply measure Linux boot
+time in C64 cycles and make sure the whole thing still runs as intended.
+
+In my tests, Kernalemu has a higher emulation speed compared to full system
+emulation with VICE.
+
 # kernalemu - Commodore KERNAL emulator
 
 **kernalemu** is a C reimplementation of the Commodore KERNAL API, combined with a 6502 emulator. It allows runnung cleanly written PET/C64/C128 etc. command line applications on the UNIX command line, like BASIC interpreters, assemblers, monitors and text adventures.
@@ -15,7 +29,7 @@
 ## Usage
 
     kernalemu [options] file...
-   
+
 You have to specify one or more programs. They have to be in PRG format, i.e. the first two bytes of the file contain the load address. All files are loaded into the emulator's memory.
 
 ### Options
@@ -41,20 +55,20 @@ There are several applications in the `demo` subdirectory. Here is how to run th
 ### PET BASIC V4
 
 	$ kernalemu demo/basic4.prg -start 0xd3b5 -machine pet4
-    
+
 	*** COMMODORE BASIC 4.0 ***
-	
+
 	 31743 BYTES FREE
-	
+
 	READY.
 
 ### VIC-20 BASIC V2
 
 	$ kernalemu demo/vic20basic.prg -startind 0xc000 -machine vic20
-	
+
 	**** CBM BASIC V2 ****
 	28159 BYTES FREE
-	
+
 	READY.
 
 ### VIC-20 BASIC V2 + BASIC V4
@@ -63,18 +77,18 @@ There are several applications in the `demo` subdirectory. Here is how to run th
 
 	**** CBM BASIC V2 ****
 	28159 BYTES FREE
-	
+
 	READY.
 
 ### C64 BASIC V2
 
 	$ kernalemu demo/basic2.prg -startind 0xa000 -machine c64
-	
-	
+
+
 	    **** COMMODORE 64 BASIC V2 ****
-	
+
 	 64K RAM SYSTEM  38911 BASIC BYTES FREE
-	
+
 	READY.
 
 ### C64 BASIC V2 + SIMONS BASIC
@@ -82,9 +96,9 @@ There are several applications in the `demo` subdirectory. Here is how to run th
 	$ kernalemu demo/simonsbasic.prg demo/basic2.prg -startind 0x8000
 
 	*** EXTENDED CBM V2 BASIC ***
-	
+
 	30719 BASIC BYTES FREE
-	
+
 	READY.
 
 ### Plus/4 BASIC V3.5
@@ -100,23 +114,23 @@ There are several applications in the `demo` subdirectory. Here is how to run th
 
 	$ kernalemu demo/c128basic.prg -start 0x4000 -machine c128
 
-	
+
 	 COMMODORE BASIC V7.0 122365 BYTES FREE
 	   (C)1986 COMMODORE ELECTRONICS, LTD.
 		 (C)1977 MICROSOFT CORP.
 		   ALL RIGHTS RESERVED
-	
+
 	READY.
 
 ### Assembler 64
 
 	$ kernalemu demo/assembler64.prg
-	
-	
+
+
 	CBM RESIDENT ASSEMBLER V080282
 	(C) 1982 BY COMMODORE BUSINESS MACHINES
-	
-	OBJECT FILE (CR OR D:NAME): 
+
+	OBJECT FILE (CR OR D:NAME):
 
 This is the assembler Commodore used to build their ROMs. It will successfully build e.g. [the C64 KERNAL source](https://www.pagetable.com/?p=894) if you extract the files from the disk image and pass `kernal` as the source file name:
 
@@ -155,9 +169,9 @@ The assembler sends the LST output to the printer, which you can find in the fil
 
 	C/128 6502 ASSEMBLER V022086
 	(C)1986 BY COMMODORE BUSINESS MACHINES
-	
-	
-	SOURCE FILE  (SYNTAX: [DRIVE:]FILENAME) ? 
+
+
+	SOURCE FILE  (SYNTAX: [DRIVE:]FILENAME) ?
 
 *TODO*
 
@@ -174,7 +188,7 @@ The assembler sends the LST output to the printer, which you can find in the fil
 ### Commodore Monitor for C64
 
 	$ kernalemu demo/monitor64.prg -machine c64
-	
+
 	B*
 	   PC  SR AC XR YR SP
 	.;C03D 22 00 C3 00 FF
@@ -183,7 +197,7 @@ The assembler sends the LST output to the printer, which you can find in the fil
 ### [Final Cartridge III Monitor](https://github.com/mist64/final_cartridge)
 
 	$ kernalemu demo/fc3monitor.prg -machine c64
-	
+
 	C*
 	   PC  IRQ  BK AC XR YR SP NV#BDIZC
 	.;4024 0000 07 8D FF 00 FF *.*.....
@@ -195,16 +209,16 @@ The assembler sends the LST output to the printer, which you can find in the fil
 	$ kernalemu 1.Adventure\ Land.prg -machine vic20 -start 0x7F50
 
 	COMMODORE Presents:
-	
+
 	***** ADVENTURE *****
-	
+
 	(C) 1981
 	by Scott Adams,INC
-	
+
 	Adventure number: 1
-	
+
 	Version: 1/416
-	
+
 	Want to restore
 	previously saved game?
 
