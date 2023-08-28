@@ -1,7 +1,7 @@
 // KERNAL Emulator
 // Copyright (c) 2009-2021 Michael Steil, James Abbatiello et al.
 // All rights reserved. License: 2-clause BSD
-
+#include <assert.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -21,6 +21,7 @@
 
 machine_t machine;
 uint16_t c64_has_external_rom;
+extern uint8_t REU[16*1024*1024];
 
 static uint16_t
 parse_num(char *s)
@@ -39,6 +40,13 @@ parse_num(char *s)
 int
 main(int argc, char **argv)
 {
+    FILE *reufile = fopen("reufile.linux", "rb");
+    assert(reufile != NULL);
+    int readreu = fread(REU, 1, 16777216, reufile);
+    printf("READ REU: %d\n",  readreu);
+    assert(readreu == 16777216);
+    fclose(reufile);
+
 	if (argc <= 1) {
 		printf("Usage: %s <filenames> [<arguments>]\n", argv[0]);
 		exit(1);
@@ -202,4 +210,3 @@ main(int argc, char **argv)
 
 	return 0;
 }
-
