@@ -3,6 +3,11 @@
 // All rights reserved. License: 2-clause BSD
 
 #include <sys/types.h>
+#include <sys/ioctl.h>
+#include <termios.h>
+#include <fcntl.h>
+#include <time.h>
+#include <unistd.h>
 #include <string.h>
 #include <stdio.h>
 #include "glue.h"
@@ -82,6 +87,12 @@ SETNAM()
 {
 	FNADR = x | y << 8;
 	FNLEN = a;
+}
+
+static int has_char() {
+    int n;
+    ioctl(STDIN_FILENO, FIONREAD, &n);
+    return n != 0;
 }
 
 // OPEN - Open a logical file
@@ -289,12 +300,20 @@ void
 BASIN()
 {
 //		printf("%s:%d DFLTN: %d\n", __func__, __LINE__, DFLTN);
+
 	switch (DFLTN) {
 		case KERN_DEVICE_KEYBOARD:
+            if (!has_char()) a=0;
+            else {
 			a = getchar(); // stdin
+                if (a>= 'a' && a <='z')
+                    a = a-'a'+'A';
+                else if (a>= 'A' && a <='Z')
+                    a = a-'A'+'a';
 			if (a == '\n') {
 				a = '\r';
 			}
+            }
 			break;
 		case KERN_DEVICE_CASSETTE:
 		case KERN_DEVICE_RS232:

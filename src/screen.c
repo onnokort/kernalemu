@@ -5,6 +5,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/ioctl.h>
+#include <termios.h>
 #include "console.h"
 #include "glue.h"
 
@@ -20,6 +24,19 @@ screen_init(uint8_t c, bool t)
 {
 	columns = c;
 	text_mode = t;
+
+    // Setup stdin to be able to peek at input chars, for more accurate
+    // behavior of BASIN
+    // FIXME: Echoing is still not fixed properly
+    // References & see also:
+    // Morgan McGuire, https://www.flipcode.com/archives/_kbhit_for_Linux.shtml
+    // https://stackoverflow.com/questions/29335758/using-kbhit-and-getch-on-linux
+
+    struct termios tc;
+    tcgetattr(STDIN_FILENO, &tc);
+    tc.c_iflag &= ~(ECHO|ICANON);
+    tcsetattr(STDIN_FILENO, TCSANOW, &tc);
+    setbuf(stdin, NULL);
 }
 
 // CINT - Initialize screen editor and devices
@@ -52,6 +69,8 @@ PLOT() // Read/set X,Y cursor position
 		exit(1);
 	}
 }
+
+extern void print_cpu_state();
 
 void
 screen_bsout()
@@ -174,5 +193,6 @@ screen_bsout()
 			}
 		}
 	}
+    if (a == '\r') print_cpu_state();
 	fflush(stdout);
 }

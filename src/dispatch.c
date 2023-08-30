@@ -49,9 +49,16 @@ static void MONITOR() { NYI(); }
 
 extern uint64_t instructions, clockticks6502;
 
+void print_cpu_state() {
+//    printf("\n6502 INSTRUCTION COUNT:%ld\n", instructions);
+//    printf("6502 CLOCK TICKS: %ld\n", clockticks6502);
+    printf("[%12ld %12ld]\t", instructions, clockticks6502);
+}
+
 static void RESET() {
- printf("\n6502 INSTRUCTION COUNT:%ld\n", instructions);
- printf("6502 CLOCK TICKS: %ld\n", clockticks6502);
+    printf("\nCPU:");
+    print_cpu_state();
+    printf("\n");
  exit(0);
 }
 
@@ -409,4 +416,3 @@ kernal_dispatch(machine_t machine)
 
 	return success;
 }
-
